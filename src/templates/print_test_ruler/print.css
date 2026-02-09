@@ -1,0 +1,12 @@
+/**
+ * 프린터 보정 테스트 인쇄 스타일
+ */
+
+@media print {
+  .print-test-sheet {
+    width: 210mm;
+    height: 297mm;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

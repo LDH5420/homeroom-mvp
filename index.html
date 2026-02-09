@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>담임도구 - 명렬표 출력</title>
+  <link rel="stylesheet" href="/src/styles/app.css">
+  <link rel="stylesheet" href="/src/styles/print-common.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 헤더 -->
+    <header class="app-header screen-only">
+      <h1>담임도구</h1>
+      <div id="class-indicator"></div>
+    </header>
+
+    <!-- 화면 1: 반 선택/관리 -->
+    <section id="view-class" class="view" data-view="class">
+      <div class="view-header">
+        <h2>반 선택/관리</h2>
+      </div>
+      <div class="view-content">
+        <div id="class-list"></div>
+        <button id="btn-add-class" class="btn btn-primary">+ 새 반 만들기</button>
+
+        <!-- 반 생성 폼 -->
+        <div id="class-form" class="form-card hidden">
+          <h3>새 반 만들기</h3>
+          <div class="form-row">
+            <label>학년도</label>
+            <input type="number" id="input-year" value="2026" min="2020" max="2030">
+          </div>
+          <div class="form-row">
+            <label>학기</label>
+            <select id="input-term">
+              <option value="1">1학기</option>
+              <option value="2">2학기</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>학년</label>
+            <select id="input-grade">
+              <option value="1">1학년</option>
+              <option value="2">2학년</option>
+              <option value="3">3학년</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>반</label>
+            <input type="number" id="input-class-no" value="1" min="1" max="20">
+          </div>
+          <div class="form-row">
+            <label>담임</label>
+            <input type="text" id="input-teacher" placeholder="선생님 이름">
+          </div>
+          <div class="form-actions">
+            <button id="btn-save-class" class="btn btn-primary">저장</button>
+            <button id="btn-cancel-class" class="btn btn-secondary">취소</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 화면 2: 학생명렬 입력 -->
+    <section id="view-students" class="view hidden" data-view="students">
+      <div class="view-header">
+        <h2>학생명렬 입력</h2>
+        <button id="btn-back-to-class" class="btn btn-text">반 선택</button>
+      </div>
+      <div class="view-content">
+        <div class="paste-area">
+          <p>엑셀/한글에서 복사한 명렬을 붙여넣으세요 (번호+이름 또는 이름만)</p>
+          <textarea id="paste-input" rows="5" placeholder="1	김민수&#10;2	이서연&#10;3	박준호&#10;..."></textarea>
+          <button id="btn-parse-paste" class="btn btn-primary">붙여넣기 적용</button>
+        </div>
+
+        <div class="student-table-wrap">
+          <table id="student-table">
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>이름</th>
+                <th>성별</th>
+                <th>메모</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="student-tbody"></tbody>
+          </table>
+          <button id="btn-add-student" class="btn btn-secondary">+ 학생 추가</button>
+        </div>
+
+        <div class="view-footer">
+          <button id="btn-go-print" class="btn btn-primary btn-large">서식/출력 센터로</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 화면 3: 서식/출력 센터 -->
+    <section id="view-print-center" class="view hidden" data-view="print-center">
+      <div class="view-header">
+        <h2>서식/출력 센터</h2>
+        <button id="btn-back-to-students" class="btn btn-text">명렬 수정</button>
+      </div>
+      <div class="view-content">
+        <div class="print-menu">
+          <button class="print-menu-item" data-template="attendance_label_v1">
+            <span class="icon">📋</span>
+            <span class="label">출석부 부착</span>
+          </button>
+          <button class="print-menu-item" data-template="roster_table_v1">
+            <span class="icon">📝</span>
+            <span class="label">명렬표</span>
+          </button>
+          <button class="print-menu-item" data-template="locker_label_v1">
+            <span class="icon">🗄️</span>
+            <span class="label">사물함</span>
+          </button>
+          <button class="print-menu-item" data-template="seating_chart_v1">
+            <span class="icon">🪑</span>
+            <span class="label">자리바꾸기</span>
+          </button>
+          <button class="print-menu-item" data-template="vote_ballot_v1">
+            <span class="icon">🗳️</span>
+            <span class="label">학급투표</span>
+          </button>
+          <button class="print-menu-item" data-template="survey_form_v1">
+            <span class="icon">📄</span>
+            <span class="label">기초조사서</span>
+          </button>
+        </div>
+        <div class="print-menu-secondary">
+          <button class="btn btn-text" data-template="print_test_ruler">프린터 보정 테스트</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 화면 4: 프린트 미리보기 -->
+    <section id="view-preview" class="view hidden" data-view="preview">
+      <div class="view-header screen-only">
+        <h2 id="preview-title">미리보기</h2>
+        <button id="btn-back-to-print-center" class="btn btn-text">뒤로</button>
+      </div>
+      <div class="view-content">
+        <!-- 템플릿별 옵션 영역 -->
+        <div id="template-options" class="screen-only"></div>
+
+        <!-- 프린터 보정 -->
+        <div id="offset-controls" class="screen-only">
+          <label>X 오프셋 (mm): <input type="number" id="offset-x" value="0" step="0.5"></label>
+          <label>Y 오프셋 (mm): <input type="number" id="offset-y" value="0" step="0.5"></label>
+          <button id="btn-save-offset" class="btn btn-secondary">보정값 저장</button>
+        </div>
+
+        <!-- 인쇄 안내 -->
+        <div id="print-guide" class="screen-only">
+          <p>인쇄 설정: <strong>배율 100%</strong>, <strong>여백 없음</strong> (또는 사용자 지정 0mm)</p>
+        </div>
+
+        <!-- 미리보기 컨테이너 -->
+        <div id="preview-container">
+          <div id="print-area" class="print-only"></div>
+        </div>
+
+        <div class="view-footer screen-only">
+          <button id="btn-print" class="btn btn-primary btn-large">인쇄하기</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 인쇄 전용 영역 -->
+    <div id="print-output" class="print-only"></div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

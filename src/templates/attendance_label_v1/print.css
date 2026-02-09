@@ -1,0 +1,15 @@
+/**
+ * 출석부 부착 명렬표 인쇄 스타일
+ */
+
+@media print {
+  .attendance-sheet {
+    width: 210mm;
+    height: 297mm;
+  }
+
+  .attendance-cell {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
