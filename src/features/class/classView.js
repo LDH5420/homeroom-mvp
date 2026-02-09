@@ -8,12 +8,25 @@ import {
   getAllClasses,
   getClass,
   deleteClass,
-  getClassDisplayName,
 } from '../../db/repositories/classesRepo.js';
 import { getStudentCount } from '../../db/repositories/studentsRepo.js';
 import { setActiveClassId, getActiveClassId } from '../../db/repositories/settingsRepo.js';
 
 let activeClassId = null;
+
+// 모달 열기/닫기
+function toggleModal(show) {
+  const modal = document.getElementById('modal-class');
+  modal.classList.toggle('active', show);
+
+  if (show) {
+    document.getElementById('input-year').value = new Date().getFullYear();
+    document.getElementById('input-term').value = '1';
+    document.getElementById('input-grade').value = '1';
+    document.getElementById('input-class-no').value = '1';
+    document.getElementById('input-teacher').value = '';
+  }
+}
 
 /**
  * 반 목록 렌더링
@@ -23,7 +36,12 @@ async function renderClassList() {
   const classes = await getAllClasses();
 
   if (classes.length === 0) {
-    container.innerHTML = '<p class="text-muted text-center">등록된 반이 없습니다. 새 반을 만들어주세요.</p>';
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📁</div>
+        <p>등록된 반이 없습니다</p>
+      </div>
+    `;
     return;
   }
 
@@ -38,30 +56,15 @@ async function renderClassList() {
           <div class="class-item-meta">
             ${cls.schoolYear}년 ${cls.term}학기
             ${cls.teacherName ? `· ${cls.teacherName}` : ''}
-            · 학생 ${count}명
+            · ${count}명
           </div>
         </div>
-        <button class="btn btn-text btn-delete-class" data-class-id="${cls.id}">삭제</button>
+        <button class="btn btn-ghost btn-sm btn-delete-class" data-class-id="${cls.id}">삭제</button>
       </div>
     `;
   }));
 
   container.innerHTML = html.join('');
-}
-
-/**
- * 폼 표시/숨김
- */
-function toggleForm(show) {
-  const form = document.getElementById('class-form');
-  form.classList.toggle('hidden', !show);
-  if (show) {
-    document.getElementById('input-year').value = new Date().getFullYear();
-    document.getElementById('input-term').value = '1';
-    document.getElementById('input-grade').value = '1';
-    document.getElementById('input-class-no').value = '1';
-    document.getElementById('input-teacher').value = '';
-  }
 }
 
 /**
@@ -85,7 +88,7 @@ async function saveNewClass() {
 
     // 새로 만든 반을 활성화
     await selectClass(newClass.id);
-    toggleForm(false);
+    toggleModal(false);
     await renderClassList();
   } catch (error) {
     console.error('반 생성 실패:', error);
@@ -110,8 +113,10 @@ async function selectClass(classId) {
 /**
  * 반 삭제
  */
-async function handleDeleteClass(classId) {
-  if (!confirm('이 반을 삭제하시겠습니까? 학생 정보도 함께 삭제됩니다.')) {
+async function handleDeleteClass(classId, e) {
+  e.stopPropagation();
+
+  if (!confirm('이 반을 삭제하시겠습니까?')) {
     return;
   }
 
@@ -133,25 +138,35 @@ async function handleDeleteClass(classId) {
  * 뷰 초기화
  */
 export function initClassView() {
-  // 새 반 만들기 버튼
+  // 새 반 만들기 버튼 → 모달 열기
   document.getElementById('btn-add-class').addEventListener('click', () => {
-    toggleForm(true);
+    toggleModal(true);
+  });
+
+  // 모달 닫기
+  document.getElementById('btn-modal-close').addEventListener('click', () => {
+    toggleModal(false);
+  });
+
+  document.getElementById('btn-cancel-class').addEventListener('click', () => {
+    toggleModal(false);
+  });
+
+  // 모달 외부 클릭 시 닫기
+  document.getElementById('modal-class').addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal-overlay')) {
+      toggleModal(false);
+    }
   });
 
   // 저장 버튼
   document.getElementById('btn-save-class').addEventListener('click', saveNewClass);
 
-  // 취소 버튼
-  document.getElementById('btn-cancel-class').addEventListener('click', () => {
-    toggleForm(false);
-  });
-
   // 반 목록 클릭 (이벤트 위임)
   document.getElementById('class-list').addEventListener('click', async (e) => {
     const deleteBtn = e.target.closest('.btn-delete-class');
     if (deleteBtn) {
-      e.stopPropagation();
-      await handleDeleteClass(deleteBtn.dataset.classId);
+      await handleDeleteClass(deleteBtn.dataset.classId, e);
       return;
     }
 

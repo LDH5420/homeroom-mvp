@@ -22,6 +22,11 @@ export function navigateTo(viewName, params = {}) {
     targetView.classList.remove('hidden');
     currentView = viewName;
 
+    // 사이드바 활성 상태 업데이트
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+      item.classList.toggle('active', item.dataset.view === viewName);
+    });
+
     // 뷰별 진입 처리
     window.dispatchEvent(new CustomEvent('viewenter', {
       detail: { view: viewName, params }
@@ -33,10 +38,24 @@ export function navigateTo(viewName, params = {}) {
 export function updateClassIndicator(classInfo) {
   const indicator = document.getElementById('class-indicator');
   if (classInfo) {
-    indicator.textContent = `${classInfo.grade}학년 ${classInfo.classNo}반`;
+    indicator.textContent = `${classInfo.schoolYear} · ${classInfo.term}학기 · ${classInfo.grade}-${classInfo.classNo}`;
+    indicator.style.display = 'flex';
   } else {
     indicator.textContent = '';
+    indicator.style.display = 'none';
   }
+}
+
+// 사이드바 네비게이션 초기화
+function initSidebar() {
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const viewName = item.dataset.view;
+      if (viewName) {
+        navigateTo(viewName);
+      }
+    });
+  });
 }
 
 // 앱 초기화
@@ -44,6 +63,9 @@ async function init() {
   try {
     // IndexedDB 초기화
     await initDB();
+
+    // 사이드바 초기화
+    initSidebar();
 
     // 각 뷰 초기화
     initClassView();

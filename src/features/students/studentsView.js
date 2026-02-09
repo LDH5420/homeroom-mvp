@@ -18,6 +18,14 @@ let currentClassId = null;
 let students = [];
 
 /**
+ * 학생 수 업데이트
+ */
+function updateStudentCount() {
+  const countEl = document.getElementById('student-count');
+  countEl.textContent = `${students.length}명`;
+}
+
+/**
  * 학생 테이블 렌더링
  */
 function renderStudentTable() {
@@ -26,37 +34,39 @@ function renderStudentTable() {
   if (students.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="5" class="text-muted text-center">학생이 없습니다. 위에서 붙여넣거나 추가하세요.</td>
+        <td colspan="5" class="empty-state">학생이 없습니다</td>
       </tr>
     `;
+    updateStudentCount();
     return;
   }
 
   const html = students.map((s, index) => `
     <tr data-student-id="${s.id}" data-index="${index}">
-      <td class="number-cell">
-        <input type="number" value="${s.number}" min="1" max="99" data-field="number">
+      <td>
+        <input type="number" class="form-input form-input-sm" value="${s.number}" min="1" max="99" data-field="number">
       </td>
-      <td class="name-cell">
-        <input type="text" value="${s.name}" placeholder="이름" data-field="name">
+      <td>
+        <input type="text" class="form-input form-input-sm" value="${s.name}" placeholder="이름" data-field="name">
       </td>
-      <td class="gender-cell">
-        <select data-field="gender">
+      <td>
+        <select class="form-select form-input-sm" data-field="gender">
           <option value="">-</option>
           <option value="M" ${s.gender === 'M' ? 'selected' : ''}>남</option>
           <option value="F" ${s.gender === 'F' ? 'selected' : ''}>여</option>
         </select>
       </td>
       <td>
-        <input type="text" value="${s.notes || ''}" placeholder="메모" data-field="notes">
+        <input type="text" class="form-input form-input-sm" value="${s.notes || ''}" placeholder="" data-field="notes">
       </td>
-      <td class="action-cell">
-        <button class="btn-delete-student" data-student-id="${s.id}">&times;</button>
+      <td>
+        <button class="btn btn-ghost btn-icon btn-sm text-danger btn-delete-student" data-student-id="${s.id}">&times;</button>
       </td>
     </tr>
   `).join('');
 
   tbody.innerHTML = html;
+  updateStudentCount();
 }
 
 /**
@@ -83,8 +93,8 @@ async function handleParsePaste() {
   if (students.length > 0) {
     shouldReplace = confirm(
       `${parsed.length}명의 학생을 파싱했습니다.\n` +
-      `'확인': 기존 ${students.length}명을 대체\n` +
-      `'취소': 기존 학생에 추가`
+      `[확인] 기존 ${students.length}명을 대체\n` +
+      `[취소] 기존 학생에 추가`
     );
   }
 
@@ -182,18 +192,13 @@ async function loadStudents(classId) {
  * 뷰 초기화
  */
 export function initStudentsView() {
-  // 뒤로 버튼
-  document.getElementById('btn-back-to-class').addEventListener('click', () => {
-    navigateTo('class');
-  });
-
   // 붙여넣기 적용
   document.getElementById('btn-parse-paste').addEventListener('click', handleParsePaste);
 
   // 학생 추가
   document.getElementById('btn-add-student').addEventListener('click', handleAddStudent);
 
-  // 서식/출력 센터로 이동
+  // 출력 센터로 이동
   document.getElementById('btn-go-print').addEventListener('click', () => {
     if (students.length === 0) {
       alert('학생을 먼저 입력해주세요.');
