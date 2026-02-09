@@ -20,19 +20,19 @@
       <ul class="sidebar-nav">
         <li class="sidebar-item active" data-view="class">
           <span class="step-num">1</span>
-          <span>반 관리</span>
+          <span>반 설정</span>
         </li>
         <li class="sidebar-item" data-view="students">
           <span class="step-num">2</span>
-          <span>명렬 입력</span>
+          <span>학생 목록</span>
         </li>
         <li class="sidebar-item" data-view="print-center">
           <span class="step-num">3</span>
-          <span>출력 센터</span>
+          <span>서식 선택</span>
         </li>
         <li class="sidebar-item" data-view="preview">
           <span class="step-num">4</span>
-          <span>미리보기</span>
+          <span>인쇄 미리보기</span>
         </li>
       </ul>
     </aside>
@@ -40,11 +40,11 @@
     <!-- ========== 우측 메인 영역 ========== -->
     <main class="main-content">
 
-      <!-- ===== 화면 1: 반 관리 ===== -->
+      <!-- ===== 화면 1: 반 설정 ===== -->
       <section id="view-class" class="view" data-view="class">
         <div class="card">
           <div class="card-header">
-            <h2>반 관리</h2>
+            <h2>반 설정</h2>
             <button id="btn-add-class" class="btn btn-primary btn-sm">+ 새 반 만들기</button>
           </div>
           <div class="card-body">
@@ -58,7 +58,7 @@
         </div>
       </section>
 
-      <!-- ===== 화면 2: 학생명렬 입력 ===== -->
+      <!-- ===== 화면 2: 학생 목록 ===== -->
       <section id="view-students" class="view hidden" data-view="students">
         <!-- 붙여넣기 카드 -->
         <div class="card">
@@ -102,59 +102,103 @@
           </div>
           <div class="card-footer flex justify-between items-center">
             <span class="text-muted" id="student-count">0명</span>
-            <button id="btn-go-print" class="btn btn-primary">출력 센터로 →</button>
+            <button id="btn-go-print" class="btn btn-primary">서식 선택으로 →</button>
           </div>
         </div>
       </section>
 
-      <!-- ===== 화면 3: 서식/출력 센터 ===== -->
+      <!-- ===== 화면 3: 서식 선택 ===== -->
       <section id="view-print-center" class="view hidden" data-view="print-center">
+
+        <!-- 학기초 준비 -->
         <div class="card">
           <div class="card-header">
-            <h2>출력 센터</h2>
+            <div>
+              <h2>학기초 준비</h2>
+              <p class="text-muted" style="font-size:13px; margin-top:4px">학기 시작 전에 한 번만 준비하면 되는 서식입니다.</p>
+            </div>
           </div>
           <div class="card-body">
             <div class="chip-grid">
-              <button class="chip" data-template="attendance_label_v1">
-                <span class="chip-icon">📋</span>
-                <span class="chip-label">출석부 부착</span>
-              </button>
               <button class="chip" data-template="roster_table_v1">
                 <span class="chip-icon">📝</span>
                 <span class="chip-label">명렬표</span>
+                <span class="chip-desc">학기초 기본 명렬표를 다양한 형식으로 출력합니다.</span>
               </button>
               <button class="chip" data-template="locker_label_v1">
                 <span class="chip-icon">🗄️</span>
-                <span class="chip-label">사물함</span>
-              </button>
-              <button class="chip" data-template="seating_chart_v1">
-                <span class="chip-icon">🪑</span>
-                <span class="chip-label">자리배치</span>
-              </button>
-              <button class="chip" data-template="vote_ballot_v1">
-                <span class="chip-icon">🗳️</span>
-                <span class="chip-label">투표용지</span>
+                <span class="chip-label">사물함 명렬표</span>
+                <span class="chip-desc">사물함 칸 수에 맞춰 명렬표를 출력합니다.</span>
               </button>
               <button class="chip" data-template="survey_form_v1">
                 <span class="chip-icon">📄</span>
                 <span class="chip-label">기초조사서</span>
+                <span class="chip-desc">학년별 기초조사서 양식을 인쇄합니다.</span>
               </button>
-            </div>
-            <div class="mt-lg text-center">
-              <button class="btn btn-ghost btn-sm" data-template="print_test_ruler">🔧 프린터 보정 테스트</button>
             </div>
           </div>
         </div>
+
+        <!-- 교실 운영 -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2>교실 운영</h2>
+              <p class="text-muted" style="font-size:13px; margin-top:4px">교실에서 수시로 사용하는 운영용 서식입니다.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="chip-grid chip-grid-2">
+              <button class="chip" data-template="attendance_label_v1">
+                <span class="chip-icon">📋</span>
+                <span class="chip-label">출석부 부착용 명렬표</span>
+                <span class="chip-desc">출석부 앞표지·부착용 명렬표를 인쇄합니다.</span>
+              </button>
+              <button class="chip" data-template="seating_chart_v1">
+                <span class="chip-icon">🪑</span>
+                <span class="chip-label">자리바꾸기</span>
+                <span class="chip-desc">좌석 배치를 설정하고 자리표를 인쇄합니다.</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 학급 운영 -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2>학급 운영</h2>
+              <p class="text-muted" style="font-size:13px; margin-top:4px">학급 의사결정 및 공동 활동을 위한 서식입니다.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="chip-grid chip-grid-1">
+              <button class="chip" data-template="vote_ballot_v1">
+                <span class="chip-icon">🗳️</span>
+                <span class="chip-label">학급투표</span>
+                <span class="chip-desc">투표용지와 개표표를 출력합니다.</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 유틸리티 -->
+        <div class="utility-section">
+          <button class="btn btn-ghost" data-template="print_test_ruler">
+            🛠️ 프린터 보정 테스트
+            <span class="text-muted" style="font-size:12px; margin-left:8px">프린터 출력 위치를 미리 확인하고 보정합니다.</span>
+          </button>
+        </div>
       </section>
 
-      <!-- ===== 화면 4: 프린트 미리보기 ===== -->
+      <!-- ===== 화면 4: 인쇄 미리보기 ===== -->
       <section id="view-preview" class="view hidden" data-view="preview">
         <div class="preview-layout">
           <!-- 좌측: 컨트롤 -->
           <div class="preview-controls">
             <div class="card">
               <div class="card-header">
-                <h3 id="preview-title">미리보기</h3>
+                <h3 id="preview-title">인쇄 미리보기</h3>
               </div>
               <div class="card-body">
                 <!-- 템플릿 옵션 -->
@@ -233,6 +277,23 @@
       <div class="modal-footer">
         <button id="btn-cancel-class" class="btn btn-secondary">취소</button>
         <button id="btn-save-class" class="btn btn-primary">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 모달: 안내 (데이터 부족 시) ========== -->
+  <div id="modal-guide" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="guide-title">안내</h2>
+        <button id="btn-guide-close" class="btn btn-ghost btn-icon">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="guide-message"></p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-guide-cancel" class="btn btn-ghost">취소</button>
+        <button id="btn-guide-action" class="btn btn-primary">이동하기</button>
       </div>
     </div>
   </div>

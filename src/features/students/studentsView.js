@@ -198,12 +198,8 @@ export function initStudentsView() {
   // 학생 추가
   document.getElementById('btn-add-student').addEventListener('click', handleAddStudent);
 
-  // 출력 센터로 이동
+  // 서식 선택으로 이동 (막지 않음 - 서식 선택에서 안내)
   document.getElementById('btn-go-print').addEventListener('click', () => {
-    if (students.length === 0) {
-      alert('학생을 먼저 입력해주세요.');
-      return;
-    }
     navigateTo('print-center');
   });
 
