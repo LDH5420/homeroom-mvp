@@ -117,27 +117,22 @@ function handlePrint() {
  * 뷰 초기화
  */
 export function initPreview() {
-  // 뒤로 버튼
-  document.getElementById('btn-back-to-print-center').addEventListener('click', () => {
-    navigateTo('print-center');
-  });
-
   // 오프셋 변경 시 실시간 적용
-  document.getElementById('offset-x').addEventListener('input', (e) => {
+  document.getElementById('offset-x')?.addEventListener('input', (e) => {
     currentProfile.offsetMm.x = parseFloat(e.target.value) || 0;
     applyOffset();
   });
 
-  document.getElementById('offset-y').addEventListener('input', (e) => {
+  document.getElementById('offset-y')?.addEventListener('input', (e) => {
     currentProfile.offsetMm.y = parseFloat(e.target.value) || 0;
     applyOffset();
   });
 
   // 보정값 저장
-  document.getElementById('btn-save-offset').addEventListener('click', handleSaveOffset);
+  document.getElementById('btn-save-offset')?.addEventListener('click', handleSaveOffset);
 
   // 인쇄 버튼
-  document.getElementById('btn-print').addEventListener('click', handlePrint);
+  document.getElementById('btn-print')?.addEventListener('click', handlePrint);
 
   // 뷰 진입 시 데이터 로드
   window.addEventListener('viewenter', async (e) => {

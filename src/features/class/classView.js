@@ -139,31 +139,31 @@ async function handleDeleteClass(classId, e) {
  */
 export function initClassView() {
   // 새 반 만들기 버튼 → 모달 열기
-  document.getElementById('btn-add-class').addEventListener('click', () => {
+  document.getElementById('btn-add-class')?.addEventListener('click', () => {
     toggleModal(true);
   });
 
   // 모달 닫기
-  document.getElementById('btn-modal-close').addEventListener('click', () => {
+  document.getElementById('btn-modal-close')?.addEventListener('click', () => {
     toggleModal(false);
   });
 
-  document.getElementById('btn-cancel-class').addEventListener('click', () => {
+  document.getElementById('btn-cancel-class')?.addEventListener('click', () => {
     toggleModal(false);
   });
 
   // 모달 외부 클릭 시 닫기
-  document.getElementById('modal-class').addEventListener('click', (e) => {
+  document.getElementById('modal-class')?.addEventListener('click', (e) => {
     if (e.target.classList.contains('modal-overlay')) {
       toggleModal(false);
     }
   });
 
   // 저장 버튼
-  document.getElementById('btn-save-class').addEventListener('click', saveNewClass);
+  document.getElementById('btn-save-class')?.addEventListener('click', saveNewClass);
 
   // 반 목록 클릭 (이벤트 위임)
-  document.getElementById('class-list').addEventListener('click', async (e) => {
+  document.getElementById('class-list')?.addEventListener('click', async (e) => {
     const deleteBtn = e.target.closest('.btn-delete-class');
     if (deleteBtn) {
       await handleDeleteClass(deleteBtn.dataset.classId, e);
