@@ -210,7 +210,7 @@ export function initStudentsView() {
   document.getElementById('btn-add-student').addEventListener('click', handleAddStudent);
 
   // 학생 초기화
-  document.getElementById('btn-clear-students').addEventListener('click', handleClearStudents);
+  document.getElementById('btn-clear-students')?.addEventListener('click', handleClearStudents);
 
   // 서식 선택으로 이동 (막지 않음 - 서식 선택에서 안내)
   document.getElementById('btn-go-print').addEventListener('click', () => {
