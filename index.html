@@ -78,7 +78,10 @@
         <div class="card">
           <div class="card-header">
             <h3>학생 명렬</h3>
-            <button id="btn-add-student" class="btn btn-secondary btn-sm">+ 학생 추가</button>
+            <div class="flex gap-sm">
+              <button id="btn-clear-students" class="btn btn-ghost btn-sm text-danger">초기화</button>
+              <button id="btn-add-student" class="btn btn-secondary btn-sm">+ 학생 추가</button>
+            </div>
           </div>
           <div class="card-body">
             <div class="table-wrap">
@@ -86,15 +89,14 @@
                 <thead>
                   <tr>
                     <th style="width:60px">번호</th>
-                    <th style="width:120px">이름</th>
-                    <th style="width:80px">성별</th>
+                    <th>이름</th>
                     <th>메모</th>
                     <th style="width:50px"></th>
                   </tr>
                 </thead>
                 <tbody id="student-tbody">
                   <tr>
-                    <td colspan="5" class="empty-state">학생이 없습니다</td>
+                    <td colspan="4" class="empty-state">학생이 없습니다</td>
                   </tr>
                 </tbody>
               </table>

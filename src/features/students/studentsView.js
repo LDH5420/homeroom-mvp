@@ -34,7 +34,7 @@ function renderStudentTable() {
   if (students.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="5" class="empty-state">학생이 없습니다</td>
+        <td colspan="4" class="empty-state">학생이 없습니다</td>
       </tr>
     `;
     updateStudentCount();
@@ -48,13 +48,6 @@ function renderStudentTable() {
       </td>
       <td>
         <input type="text" class="form-input form-input-sm" value="${s.name}" placeholder="이름" data-field="name">
-      </td>
-      <td>
-        <select class="form-select form-input-sm" data-field="gender">
-          <option value="">-</option>
-          <option value="M" ${s.gender === 'M' ? 'selected' : ''}>남</option>
-          <option value="F" ${s.gender === 'F' ? 'selected' : ''}>여</option>
-        </select>
       </td>
       <td>
         <input type="text" class="form-input form-input-sm" value="${s.notes || ''}" placeholder="" data-field="notes">
@@ -189,6 +182,24 @@ async function loadStudents(classId) {
 }
 
 /**
+ * 학생 목록 초기화
+ */
+async function handleClearStudents() {
+  if (students.length === 0) return;
+
+  if (!confirm(`학생 ${students.length}명을 모두 삭제하시겠습니까?`)) {
+    return;
+  }
+
+  // 모든 학생 삭제
+  for (const s of students) {
+    await deleteStudent(s.id);
+  }
+  students = [];
+  renderStudentTable();
+}
+
+/**
  * 뷰 초기화
  */
 export function initStudentsView() {
@@ -197,6 +208,9 @@ export function initStudentsView() {
 
   // 학생 추가
   document.getElementById('btn-add-student').addEventListener('click', handleAddStudent);
+
+  // 학생 초기화
+  document.getElementById('btn-clear-students').addEventListener('click', handleClearStudents);
 
   // 서식 선택으로 이동 (막지 않음 - 서식 선택에서 안내)
   document.getElementById('btn-go-print').addEventListener('click', () => {
